@@ -1,0 +1,35 @@
+import json
+import os
+
+def convert_to_yolo(log_path="aim_logs/log.json", output_dir="yolo_labels"):
+    os.makedirs(output_dir, exist_ok=True)
+
+    with open(log_path, "r") as f:
+        data = json.load(f)
+
+    class_map = {"Person-Head": 0, "Avatar": 1}
+
+    for entry in data:
+        label = entry["class"]
+        if label not in class_map:
+            continue
+
+        image_file = entry["screenshot"]
+        name_no_ext = os.path.splitext(image_file)[0]
+        x_center, y_center = entry["lock_position"]
+
+        # Normalize x/y to 2560x1440 YOLO format
+        x = x_center / 2560
+        y = y_center / 1440
+        w = 0.05  # placeholder box width
+        h = 0.05  # placeholder box height
+
+        yolo_line = f"{class_map[label]} {x:.6f} {y:.6f} {w:.6f} {h:.6f}\n"
+
+        with open(os.path.join(output_dir, f"{name_no_ext}.txt"), "w") as out:
+            out.write(yolo_line)
+
+    print(f"✅ Converted {len(data)} logs to YOLO format in '{output_dir}'")
+
+if __name__ == "__main__":
+    convert_to_yolo()

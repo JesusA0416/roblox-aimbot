@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+env/
+venv/
+.venv/
+*.log
+dist/
+build/
+aim_logs/screenshots/
+aim_logs/log.json
+*.exe
+*.pt

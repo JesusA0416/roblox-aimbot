@@ -1,0 +1,7 @@
+ultralytics==8.0.20
+mss
+pillow
+numpy
+pyautogui
+opencv-python
+keyboard
